@@ -8,4 +8,15 @@ def emotion_detector(text_to_analyze):
 
     nlp_response = requests.post(url, json = myobj, headers = header)
 
-    return nlp_response.text
+    formatted_response = json.loads(nlp_response.text)
+    scores = {
+            "anger":formatted_response["emotionPredictions"][0]["emotion"]["anger"], 
+            "disgust":formatted_response["emotionPredictions"][0]["emotion"]["disgust"],
+            "fear":formatted_response["emotionPredictions"][0]["emotion"]["fear"],
+            "joy":formatted_response["emotionPredictions"][0]["emotion"]["joy"],
+            "sadness":formatted_response["emotionPredictions"][0]["emotion"]["sadness"]
+            }
+    dominant_emotion = max(scores, key=scores.get)
+    scores["dominant_emotion"] = dominant_emotion
+    return scores
+    
